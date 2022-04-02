@@ -1,0 +1,61 @@
+version: "3.1"
+
+networks:
+    web:
+        external: true
+    internal:
+        external: false
+        driver: bridge
+
+services:
+    backend:
+        # networks:
+        # - internal
+        build: 
+            context: .
+            dockerfile: Dockerfile.backend
+        restart: always
+        environment:
+            USE_IN_MEMORY_DB: "false"
+            POSTGRES_HOST: db
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_PORT: 5432
+        ports:
+        - 5142:80
+
+    db:
+        # networks:
+        # - internal
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+
+    frontend:
+        # networks:
+        # - internal
+        build: 
+            context: .
+            dockerfile: Dockerfile.frontend
+        restart: always
+        ports:
+        - 3000:3000
+
+    # caddy:
+    #     networks:
+    #     - web
+    #     - internal
+    #     image: caddy:latest
+    #     restart: unless-stopped
+    #     ports:
+    #     - "80:80"
+    #     - "443:443"
+    #     volumes:
+    #     - ./Caddyfile:/etc/caddy/Caddyfile
+
+volumes:
+    Caddyfile:

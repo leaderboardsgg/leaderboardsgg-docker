@@ -1,0 +1,6 @@
+[submodule "leaderboard-backend"]
+	path = leaderboard-backend
+	url = git@github.com:leaderboardsgg/leaderboard-backend.git
+[submodule "leaderboard-site"]
+	path = leaderboard-site
+	url = git@github.com:leaderboardsgg/leaderboard-site.git

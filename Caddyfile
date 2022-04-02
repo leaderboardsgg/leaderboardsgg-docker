@@ -1,0 +1,9 @@
+www.leaderboards.gg {
+	reverse_proxy frontend:3000
+	tls internal
+}
+
+api.leaderboards.gg {
+	reverse_proxy backend:5142
+	tls internal
+}

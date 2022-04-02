@@ -1,0 +1,16 @@
+# # https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+WORKDIR /source
+
+COPY ./leaderboard-backend .
+RUN dotnet restore -r linux-musl-x64
+
+WORKDIR /source/LeaderboardBackend
+RUN dotnet publish -c Release -r linux-musl-x64 --self-contained true -o /app
+
+# final stage/image
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine-amd64
+WORKDIR /app
+COPY --from=build /app .
+
+ENTRYPOINT ["./LeaderboardBackend"]
